@@ -1,0 +1,29 @@
+class Solution {
+    public List<String> generateAbbreviations(String word) {
+        List<String> res = new ArrayList<>();
+        StringBuilder tempstr = new StringBuilder();
+        helper(word, res, tempstr, 0, 0);
+        return res;
+    }
+    private void helper(String word, List<String> res, StringBuilder tempstr, int idx, int count){
+        if(idx == word.length()){
+            int len = tempstr.length();
+            if(count > 0){
+                tempstr.append(count);
+            }
+            res.add(tempstr.toString());
+            tempstr.setLength(len);
+            return;
+        }
+        
+        helper(word, res, tempstr, idx + 1, count + 1);
+        
+        int len = tempstr.length();
+        if(count > 0){
+            tempstr.append(count);
+        }
+        tempstr.append(word.charAt(idx));
+        helper(word, res, tempstr, idx + 1, 0);
+        tempstr.setLength(len);
+    }
+}

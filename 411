@@ -1,0 +1,61 @@
+class Solution {
+    private int minLen, result; 
+    public String minAbbreviation(String target, String[] dictionary) {
+        Set<Integer> maskSet = new HashSet<>();
+        for(String s: dictionary){
+            if(s.length() == target.length()){
+                maskSet.add(getBit(s, target));
+            }
+        }
+        minLen = target.length() + 1;
+        result = -1;
+        helper(target, maskSet, 0 , 0, 0);
+        if(minLen > target.length()){
+            return "";
+        }
+        int count = 0; String ans = "";
+        for(int i = target.length() - 1; i >= 0; i--){
+            if((result & 1) == 0){
+                count++;
+            }else{
+                if(count > 0){
+                    ans = count + ans;
+                    count = 0;
+                }
+                ans = target.charAt(i) + ans;
+            }
+            result >>= 1;
+        }
+        if(count > 0) ans = count + ans;
+        return ans;
+    }
+    private void helper(String target, Set<Integer> maskSet, int start, int curLen, int curResult){
+        if(curLen > minLen) return;
+        if(start == target.length()){
+            for(int mask: maskSet){
+                if((curResult & mask) == curResult) return;
+            }
+            if(minLen > curLen){
+                minLen = curLen;
+                result = curResult;
+            }
+            return;
+        }
+        for(int i = start; i < target.length(); i++){
+            if(curLen == 0 || (curResult &1) == 1){
+                helper(target, maskSet,i + 1,curLen + 1,curResult << (i+1-start));
+             }
+        }
+        helper(target, maskSet, start+1, curLen + 1, (curResult << 1) +1);
+    }
+    private int getBit(String s1, String s2){
+        int mask = 0;
+        for(int i = 0; i < s1.length(); i++){
+            mask <<= 1;
+            if(s1.charAt(i) == s2.charAt(i)){
+                mask++;
+            }
+        }
+        return mask;
+    }
+}

@@ -4,12 +4,16 @@ class Solution {
         int mask = 0;
         for(int i = 31; i >= 0; i--){
             Set<Integer> set = new HashSet<>();
+            //set max possibility
             mask =mask| (1<< i);
             for(int num: nums){
+                //add every number's bits to set
                 set.add(num & mask);
             }
+            //so far max bits add next try position
             int temp = max | (1<<i);
             for(int prefix : set){
+                //try if the new position possible to be 1?
                 if(set.contains(temp^prefix)){
                 max = temp;
                 break;
@@ -20,3 +24,4 @@ class Solution {
         return max;
     }
 }
+//try each position could be 1 or not. 

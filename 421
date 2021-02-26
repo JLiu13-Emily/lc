@@ -7,7 +7,7 @@ class Solution {
             //set max possibility
             mask =mask| (1<< i);
             for(int num: nums){
-                //add every number's bits to set
+                //add every number's bits to align mask position
                 set.add(num & mask);
             }
             //so far max bits add next try position

@@ -1,0 +1,47 @@
+class Solution {
+    
+    public int[] maximizeXor(int[] nums, int[][] queries) {
+        List<int[]> l = new ArrayList<>();
+        for(int i = 0; i < queries.length; i++) 
+            l.add(new int[]{i, queries[i][0], queries[i][1]});
+        int[] res = new int[queries.length];
+        Trie root = new Trie();
+        Arrays.sort(nums);
+        Collections.sort(l, (a, b) -> Integer.compare(a[2], b[2]));
+        int i = 0;
+        for(int[] q: l){
+            while(i < nums.length && nums[i] <= q[2]){
+                Trie node = root;
+                int data = nums[i];
+                for(int j = 31; j >= 0; j--){
+                    if(node.children[(data >> j)&1] == null){
+                        node.children[(data >> j)&1] = new Trie();
+                    }
+                    node = node.children[(data >> j)&1];   
+                 }
+                 i++;
+            }
+            if(i == 0){
+                res[q[0]] = -1;
+                continue;
+            } 
+           Trie node = root;
+           int ans = 0;
+           for(int k = 31; k >= 0; k--){
+               if(node.children[1 - ((q[1] >> k) & 1)] != null){
+                   node = node.children[1 - ((q[1] >> k) & 1)];
+                   ans = ans*2 + 1;
+               }
+               else{
+                   node = node.children[(q[1] >> k) & 1];
+                   ans = ans*2 + 0;
+               }
+           }
+           res[q[0]] = ans;
+        }
+        return res;
+    }  
+}
+class Trie{
+      Trie[] children = new Trie[2];
+ }

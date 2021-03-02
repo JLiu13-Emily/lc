@@ -43,7 +43,7 @@ class Solution {
         int l = i; 
         int r = s.length() - 1;
         while(l < r){
-            if(s.charAt(l) != s.charAt(i)) return false;
+            if(s.charAt(l) != s.charAt(r)) return false;
             l++;
             r--;
         }

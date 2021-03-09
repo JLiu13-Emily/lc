@@ -1,0 +1,64 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public void recoverTree(TreeNode root) {
+        TreeNode firstNode = null;
+        TreeNode secondNode = null;
+        boolean first = true;
+        TreeNode previous = new TreeNode(Integer.MIN_VALUE);
+        while(root != null){
+            if(root.left != null){
+                TreeNode temp = root.left;
+                while(temp.right != null && temp.right != root){
+                    temp = temp.right;
+                }
+                if(temp.right == null){
+                    temp.right = root;
+                    root = root.left;
+                }
+                else{
+                    temp.right = null;
+                    if(previous.val > root.val && first){
+                        firstNode = previous;
+                        first = false;
+                    }
+                    if(previous.val > root.val && !first){
+                        secondNode = root;
+                    }
+                    previous = root;
+                    root = root.right;
+                    
+                }
+            }
+            else{
+                if(previous.val > root.val && first){
+                        firstNode = previous;
+                        first = false;
+                    }
+                    if(previous.val > root.val && !first){
+                        secondNode = root;
+                    }
+                    previous = root;
+                    root = root.right;
+            }
+        }
+        if(firstNode != null && secondNode != null){
+            int temp = firstNode.val;
+            firstNode.val = secondNode.val;
+            secondNode.val = temp;
+        }
+    }
+}

@@ -1,0 +1,17 @@
+class MyCalendarThree {
+    TreeMap<Integer, Integer> tm = new TreeMap<>();
+    public MyCalendarThree() {
+        
+    }    
+    public int book(int start, int end) {
+        tm.put(start, tm.getOrDefault(start, 0) + 1);
+        tm.put(end, tm.getOrDefault(end, 0) - 1);
+        int res = 0;
+        int real = 0;
+        for(int v: tm.values()){
+            res = Math.max(res, real += v);
+           
+        }
+        return res;
+    }
+}

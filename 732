@@ -9,8 +9,8 @@ class MyCalendarThree {
         int res = 0;
         int real = 0;
         for(int v: tm.values()){
-            res = Math.max(res, real += v);
-           
+            res = Math.max(res, real+ v);
+            real += v;
         }
         return res;
     }

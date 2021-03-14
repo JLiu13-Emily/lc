@@ -1,6 +1,6 @@
 class Solution {
     public List<List<Integer>> removeInterval(int[][] intervals, int[] toBeRemoved) {
-        Arrays.sort(intervals, (int[] a, int[] b) -> (a[0] - b[0]));
+       
         List<List<Integer>> res = new ArrayList<>();
         for(int[] i: intervals){
             if(i[1] <= toBeRemoved[0] || i[0] >= toBeRemoved[1]){

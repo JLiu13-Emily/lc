@@ -1,0 +1,50 @@
+class Solution {
+    public int rectangleArea(int[][] rectangles) {
+        long m = (long)(1e9 + 7);
+        List<Point> points = new ArrayList<>();
+        for(int[] i : rectangles){
+            points.add(new Point(i[0], i[1], 1));
+            points.add(new Point(i[0], i[3], -1));
+            points.add(new Point(i[2], i[1], -1));
+            points.add(new Point(i[2], i[3], 1));
+        }
+        Collections.sort(points, (a, b) -> a.x - b.x);
+        TreeMap<Integer, Integer> mapY = new TreeMap<>();
+        int preX = -1;
+        int preY = -1;
+        int count = 0;
+        for(int i = 0; i < points.size(); i++){
+            Point p = points.get(i);
+            mapY.put(p.y, mapY.getOrDefault(p.y, 0) + p.val);
+            if(i == points.size() - 1 || points.get(i + 1).x > preX){
+                if(preX > -1){
+                    count += ((long)preY *(p.x - preX))% m;
+                    count %= m;
+                }
+                preX = p.x;
+                preY = getY(mapY);
+            }
+        }
+        return count;
+    }
+    private int getY(TreeMap<Integer, Integer> mapY){
+        int res = 0; 
+        int pre = -1; 
+        int count = 0;
+        for(Map.Entry<Integer,Integer> e: mapY.entrySet()){
+            if(pre >= 0 && count > 0)
+                res += e.getKey() - pre;
+            count += e.getValue();
+            pre = e.getKey();
+        }
+        return res;
+    }
+}
+class Point{
+    int x, y, val;
+    public Point(int x, int y, int val){
+        this.x = x;
+        this.y = y;
+        this.val = val;
+    }
+}

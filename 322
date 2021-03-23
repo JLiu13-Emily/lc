@@ -1,0 +1,19 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int[] f = new int[amount + 1];
+        f[0] = 0;
+        for(int i = 1; i <= amount; i++){
+            f[i] = Integer.MAX_VALUE;
+            for(int k = 0; k < n; k++){
+                if(coins[k] <= i && f[i - coins[k]] != Integer.MAX_VALUE){
+                    f[i] = Math.min(f[i], f[i - coins[k]] + 1);
+                }
+            }
+        }
+        if(f[amount] == Integer.MAX_VALUE){
+            return -1;
+        }
+        return f[amount];
+    }
+}

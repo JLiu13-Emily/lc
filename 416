@@ -1,0 +1,17 @@
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int n = nums.length;
+        int total = Arrays.stream(nums).sum();
+        if(total % 2 != 0) return false;
+        Boolean[][] dp = new Boolean[n][total/2 + 1];
+        return helper(nums, 0, total/2, dp);
+    }
+    private boolean helper(int[] nums, int idx, int sum, Boolean[][] dp){
+        if(sum == 0) return true;
+        if(idx >= nums.length || sum < 0) return false;
+        if(dp[idx][sum] == null){
+            dp[idx][sum] = helper(nums, idx + 1, sum, dp) || helper(nums, idx + 1, sum - nums[idx], dp);
+        }
+        return dp[idx][sum];
+    }
+}

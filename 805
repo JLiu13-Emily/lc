@@ -1,0 +1,54 @@
+/*class Solution {
+    public boolean splitArraySameAverage(int[] nums) {
+        int sum = Arrays.stream(nums).sum();
+        int n = nums.length;
+        Arrays.sort(nums);
+        for(int i = 1; i < n; i++){
+            if(sum * i % n != 0) continue;
+            int target = sum * i / n;
+            if(dfs(nums, target, i, 0)) return true;
+        }
+        return false;
+    }
+    private boolean dfs(int[] nums, int target, int size, int idx){
+        if(target == 0 && size == 0) return true;
+        if(target == 0 || size == 0) return false;
+        if(idx == nums.length) return false;
+        if(dfs(nums, target - nums[idx], size - 1, idx + 1 )){
+            return true;
+        }
+        int i = idx;
+        while(i < nums.length && nums[i] == nums[idx]){
+            i++;
+        }
+        if(dfs(nums, target, size, i)){
+            return true;
+        }
+        return false;
+    }
+}*/
+//背包解法knapsack 
+class Solution {
+    public boolean splitArraySameAverage(int[] nums) {
+        Arrays.sort(nums);
+        int total = Arrays.stream(nums).sum();
+        int n = nums.length;
+        int[][] dp = new int[total + 1][n + 1];
+        dp[0][0] = 1;
+        int cursum = 0;
+        for(int a: nums){
+            cursum += a;
+            for(int sum = cursum; sum >= a; sum--){
+                for(int num = n/2 + 1; num >= 1; num--){
+                    if(dp[sum - a][num - 1] == 1){
+                        dp[sum][num] = 1;
+                        if(num != n && total * num == sum * n){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}

@@ -1,4 +1,4 @@
-class Solution {
+/*class Solution {
     public int balancedString(String s) {
         int n = s.length();
         int avg = n / 4;
@@ -16,6 +16,28 @@ class Solution {
                 res = Math.min(res, right - left);
                 char lc =s.charAt(left);
                 map.put(lc, map.get(lc) + 1);
+                left++;
+            }
+        }
+        return res;
+    }
+}*/
+class Solution {
+    public int balancedString(String s) {
+        int n = s.length();
+        int avg = n / 4;
+        int[] chars = new int[128];
+        for(char c: s.toCharArray()){
+            chars[c]++;
+        }
+        int res = n;
+        int left = 0, right = 0;
+        while(right < n){
+            chars[s.charAt(right)]--;
+            right++;
+            while(left < n && chars['Q'] <= avg && chars['W'] <= avg && chars['E'] <= avg && chars['R'] <= avg){
+                res = Math.min(res, right - left);
+                chars[s.charAt(left)]++;
                 left++;
             }
         }

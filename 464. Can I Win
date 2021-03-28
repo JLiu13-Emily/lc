@@ -1,0 +1,25 @@
+class Solution {
+    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        int sum = maxChoosableInteger *(maxChoosableInteger + 1) / 2;
+        if(sum < desiredTotal) return false;
+        if(desiredTotal <= 0) return true;
+        return helper(desiredTotal, new int[maxChoosableInteger], new HashMap<>());
+    }
+    private boolean helper(int remain, int[] state, Map<String, Boolean> map){
+        String ss = Arrays.toString(state);
+        if(map.containsKey(ss)) return map.get(ss);
+        for(int i = 0; i < state.length; i++){
+            if(state[i] == 0){
+                state[i] = 1;
+                if(remain <= i + 1 || !helper(remain - (i + 1), state, map)){
+                    map.put(ss, true);
+                    state[i] = 0;
+                    return true;
+                }
+                state[i] = 0;
+            }
+        }
+        map.put(ss, false);
+        return false;
+    }
+}

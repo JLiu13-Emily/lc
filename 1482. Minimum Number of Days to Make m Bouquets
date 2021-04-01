@@ -1,0 +1,29 @@
+class Solution {
+    public int minDays(int[] bloomDay, int m, int k) {
+        int n = bloomDay.length, left = 1, right = (int)1e9;
+        if(k * m > n) return -1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            int bloom = 0, bouNum = 0;
+            for(int i = 0; i < n; i++){
+                if(bloomDay[i] > mid){
+                    bloom = 0;                    
+                }
+                else{
+                    bloom++;
+                    if(bloom >= k){
+                    bouNum++;
+                    bloom = 0;
+                    }
+                }
+            }
+            if(bouNum < m){
+                left = mid + 1;
+            }
+            else{                
+                right = mid;
+            }
+        }
+        return left;
+    }
+}

@@ -1,0 +1,34 @@
+class Solution {
+    public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
+        int n = startTime.length;
+        Three[] tr = new Three[n];
+        for(int i = 0; i < n; i++){
+            tr[i] = new Three(startTime[i], endTime[i], profit[i]);
+        }
+        Arrays.sort(tr, (a, b) -> (a.end - b.end));
+        int[] dp = new int[n];
+        dp[0] = tr[0].profit;
+        for(int i = 1; i < n; i++){
+            dp[i] = Math.max(dp[i - 1], tr[i].profit);
+            for(int j = i - 1; j >= 0; j--){
+                if(tr[j].end <= tr[i].start){
+                    dp[i] = Math.max(dp[i], dp[j] + tr[i].profit);
+                    break;
+                }
+            }
+        }
+        int res = Integer.MIN_VALUE;
+        for(int i : dp){
+            res = Math.max(res, i);
+        }
+        return res;
+    }
+}
+class Three{
+    int start, end, profit;
+    public Three(int s, int e, int p){
+        start = s;
+        end = e;
+        profit = p;
+    }
+}

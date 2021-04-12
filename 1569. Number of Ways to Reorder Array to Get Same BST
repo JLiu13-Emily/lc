@@ -1,0 +1,50 @@
+class Solution {
+    long mod = (int)1e9 + 7;
+    public int numOfWays(int[] nums) {        
+        List<Integer> list = new ArrayList<>();
+        for(int i : nums)
+            list.add(i);
+        long res =  helper(list) % mod;
+        return (int)(res) - 1;
+    }
+    private long helper(List<Integer> list){
+        if(list.size() < 2) return 1;
+        List<Integer> left = new ArrayList<>();
+        List<Integer> right = new ArrayList<>();
+        int root = list.get(0);
+        for(int i: list){
+            if(i > root){
+                right.add(i);
+            }
+            else if(i < root){
+                left.add(i);
+            }
+        }
+        int l = left.size();
+        int r = right.size();
+        long comb = combination(r + l, l, r) % mod;
+        long L = helper(left) % mod;
+        long R = helper(right) % mod;
+        comb = (comb * L) % mod;
+        return (comb * R) % mod;
+    }
+    private long combination(int n, int l, int r){
+       long res = 1;
+        if (l < r) {
+            int t = l;
+            l = r;
+            r = t;
+        }
+        for (int i = n; i > l; i--) {
+            res *= i;
+            res = res % mod;
+        }
+        for (int i = 1; i <= r; i++) {
+            while (res % i != 0) {
+                res += mod;
+            }
+            res /= i;
+        }
+        return res;
+    }
+}

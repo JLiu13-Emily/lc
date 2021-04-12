@@ -1,0 +1,17 @@
+class Solution {
+    List<Integer> res = new ArrayList<>();
+    int idx = 0;
+    public List<Integer> flipMatchVoyage(TreeNode root, int[] voyage) {
+        return helper(voyage, root) == true? res : Arrays.asList(-1);
+    }
+    private boolean helper(int[] voy, TreeNode root){
+        if(root == null) return true;
+        if(root.val != voy[idx]) return false;
+        idx++;
+        if(root.left != null && root.left.val != voy[idx]){
+            res.add(root.val);
+            return helper(voy, root.right) && helper(voy, root.left);
+        }
+        return helper(voy, root.left) && helper(voy, root.right);
+    }
+}

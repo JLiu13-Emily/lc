@@ -1,0 +1,88 @@
+class AllOne {
+    class Node{
+        int value;
+        Node prev, next;
+        Set<String> strs;
+        Node(int val){
+            value = val;
+            strs = new LinkedHashSet<>();
+        }
+        void insert(Node nd){
+            next = nd;
+            prev = nd.prev;
+            nd.prev = this;
+            prev.next = this;
+        }
+        void remove(String str){
+            strs.remove(str);
+            if(strs.isEmpty()){
+                prev.next = next;
+                next.prev = prev;
+            }
+        }
+       
+    }
+    Node head, tail;
+    Map<String, Node> map;
+    /** Initialize your data structure here. */
+    public AllOne() {
+        head = new Node(0);
+        tail = new Node(0);
+        head.next = tail;
+        tail.prev = head;
+        map = new HashMap<>();
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    public void inc(String key) {
+        Node node = map.getOrDefault(key, head);
+        Node nextn = node.next;
+        if(nextn.value != node.value + 1){
+            nextn = new Node(node.value + 1);
+            nextn.insert(node.next);
+        }
+        nextn.strs.add(key);
+        map.put(key, nextn);
+        if(node != head) node.remove(key);        
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    public void dec(String key) {
+        Node node = map.get(key);
+        if(node == null) return;
+        if(node.value == 1){
+            map.remove(key);
+            node.remove(key);
+            return;
+        }
+        Node nextn = node.prev;
+        if(nextn.value != node.value - 1){
+            nextn = new Node(node.value - 1);
+            nextn.insert(node);
+        }
+        nextn.strs.add(key);
+        map.put(key, nextn);
+        node.remove(key);
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    public String getMaxKey() {
+        if(head == tail.prev) return "";
+        return tail.prev.strs.iterator().next();
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    public String getMinKey() {
+        if(head.next == tail) return "";
+        return head.next.strs.iterator().next();
+    }
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */

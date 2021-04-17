@@ -1,0 +1,32 @@
+class SnapshotArray {
+    TreeMap<Integer, Integer>[] tms;
+    int snapId;
+    public SnapshotArray(int length) {
+        tms = new TreeMap[length];
+        snapId = 0;
+    }
+    
+    public void set(int index, int val) {
+        if(tms[index] == null) tms[index] = new TreeMap<Integer, Integer>();
+        tms[index].put(snapId, val);
+    }
+    
+    public int snap() {
+        return snapId++;
+    }
+    
+    public int get(int index, int snap_id) {
+        TreeMap<Integer, Integer> map = tms[index];
+        if(map == null) return 0;
+        if(map.floorKey(snap_id)==null) return 0;
+        return map.get(map.floorKey(snap_id));
+    }
+}
+
+/**
+ * Your SnapshotArray object will be instantiated and called as such:
+ * SnapshotArray obj = new SnapshotArray(length);
+ * obj.set(index,val);
+ * int param_2 = obj.snap();
+ * int param_3 = obj.get(index,snap_id);
+ */

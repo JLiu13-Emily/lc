@@ -1,0 +1,26 @@
+class CustomStack {
+    List<Integer> nums = new ArrayList<>();
+    int size;
+    public CustomStack(int maxSize) {
+        size = maxSize;
+    }
+    
+    public void push(int x) {
+        if(nums.size() < size)
+            nums.add(x);
+    }
+    
+    public int pop() {
+        if(nums.size() > 0){
+            return nums.remove(nums.size() - 1);         
+        }
+        else
+            return -1;
+    }
+    
+    public void increment(int k, int val) {
+        for(int i = 0; i < k && i < nums.size(); i++){
+            nums.set(i, nums.get(i) + val);
+        }
+    }
+}

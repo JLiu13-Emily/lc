@@ -1,0 +1,55 @@
+class Solution {
+    public List<Integer> countSmaller(int[] nums) {
+        int n = nums.length;
+        if(nums == null || n == 0) return new ArrayList<Integer>();
+        Pair[] pairs = new Pair[n];
+        int[] res = new int[n];
+        for(int i = 0; i < n; i++) pairs[i] = new Pair(nums[i], i);
+        helper(pairs, 0, n - 1, res);
+        List<Integer> counts = new ArrayList<>();
+        for(int i : res) counts.add(i);
+        return counts;
+    }
+    private void helper(Pair[] pairs, int start, int end, int[] res){
+        if(start >= end) return;
+        int mid = start + (end - start) / 2;
+        helper(pairs, start, mid, res);
+        helper(pairs, mid + 1, end, res);
+        List<Pair> merged = new ArrayList<>();
+        int lessnumcount = 0;
+        int l_idx = start, r_idx = mid + 1;
+        while(l_idx < mid + 1 && r_idx <= end){
+            if(pairs[l_idx].value > pairs[r_idx].value){
+                lessnumcount++;
+                merged.add(pairs[r_idx]);
+                r_idx++;
+            }
+            else{
+                res[pairs[l_idx].idx] += lessnumcount;
+                merged.add(pairs[l_idx]);
+                l_idx++;
+            }
+        }
+        while(l_idx < mid + 1){
+            res[pairs[l_idx].idx] += lessnumcount;
+            merged.add(pairs[l_idx]);
+            l_idx++;
+        }
+        while(r_idx <= end){
+            merged.add(pairs[r_idx]);
+            r_idx++;
+        }
+        int pos = start;
+        for(Pair p: merged){
+            pairs[pos] = p;
+            pos++;
+        }
+    }
+}
+class Pair{
+    int value, idx;
+    public Pair(int v, int index){
+        value = v;
+        idx = index;
+    }
+}

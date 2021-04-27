@@ -1,0 +1,45 @@
+class Solution {
+    int count = 0;
+    int lower, upper;
+    public int countRangeSum(int[] nums, int lower, int upper) {
+        this.lower = lower;
+        this.upper = upper;
+        int n = nums.length;
+        long[] sums = new long[n + 1];
+        long[] temp = new long[n + 1];
+        for(int i = 0; i < n; i++){
+            sums[i + 1] = sums[i] + nums[i];
+        }
+        mergeSort(sums, 0, n , temp);
+        return count;
+    }
+    private void mergeSort(long[] sums, int start, int end, long[] temp){
+        if(start >= end) return;
+        int mid = start + (end - start) /2;
+        mergeSort(sums, start, mid, temp);
+        mergeSort(sums, mid + 1, end, temp);
+        merge(sums, start, mid, end, temp);
+    }
+    private void merge(long[]sums, int start, int mid, int end, long[] temp){
+        int right = mid + 1, low = mid + 1, hi = mid + 1;
+        int index = start;
+        for(int left = start; left < mid + 1; left++){
+            while(low <= end && sums[low] - sums[left] <lower ) low++;
+            while(hi <= end && sums[hi] - sums[left] <= upper) hi++;
+            while(right <= end && sums[right] -sums[left] <0){
+                temp[index++] = sums[right++];
+            }
+            temp[index] = sums[left];
+            index++;
+            count += hi - low;
+        }
+        while(right <= end){
+            temp[index] = sums[right];
+            index++;
+            right++;
+        }
+        for(int i = start; i <= end; i++){
+            sums[i] = temp[i];
+        }
+    }
+}

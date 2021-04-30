@@ -1,0 +1,46 @@
+Solution1:
+class Solution {
+    public int countNodes(TreeNode root) {
+        int left = leftDep(root);
+        int right = rightDep(root);
+        if(left == right){
+            return (1 << left) - 1;
+        }
+        else{
+            return 1 + countNodes(root.left) + countNodes(root.right);
+        }
+    }
+    private int leftDep(TreeNode root){
+        int res = 0;
+        while(root != null){
+            res++;
+            root = root.left;
+        }
+        return res;
+    }
+    private int rightDep(TreeNode root){
+        int res = 0;
+        while(root != null){
+            res++;
+            root = root.right;
+        }
+        return res;
+    }
+    
+}
+Solution2:
+class Solution {
+    public int countNodes(TreeNode root) {
+        if(root == null) return 0;
+        int totalh = hi(root), righth = hi(root.right);
+        if(totalh - 1 == righth){
+            return (1 << totalh - 1) + countNodes(root.right);
+        }
+        return (1 << totalh - 2) + countNodes(root.left);
+        
+    }
+    private int hi(TreeNode root){
+        if(root == null) return 0;
+        return hi(root.left) + 1;
+    }
+}

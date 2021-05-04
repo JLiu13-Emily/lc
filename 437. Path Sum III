@@ -1,0 +1,16 @@
+class Solution {
+    public int pathSum(TreeNode root, int targetSum) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+        return helper(root, targetSum, 0, map);
+    }
+    private int helper(TreeNode root, int targetSum, int curSum, Map<Integer, Integer> map){
+        if(root == null) return 0;
+        curSum += root.val;
+        int res = map.getOrDefault(curSum - targetSum, 0);
+        map.put(curSum, map.getOrDefault(curSum, 0) + 1);
+        res += helper(root.left, targetSum, curSum, map) + helper(root.right, targetSum, curSum, map);
+        map.put(curSum, map.get(curSum) - 1);
+        return res;
+    }
+}

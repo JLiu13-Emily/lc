@@ -1,0 +1,19 @@
+class Solution {
+    int max = 0;
+    public int longestUnivaluePath(TreeNode root) {
+        helper(root, null);
+        return max;
+    }
+    private int helper(TreeNode root, TreeNode pre){
+        if(root == null) return 0;
+        int left = helper(root.left, root); 
+        int right = helper(root.right, root);
+        max = Math.max(max, left + right);
+        if(pre != null && pre.val == root.val){
+            return Math.max(left, right) + 1;
+        }
+        else{
+            return 0;
+        }
+    }
+}

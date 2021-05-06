@@ -1,0 +1,21 @@
+class Solution {
+    int res = 0; 
+    public int pathSum(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int num : nums){
+            map.put(num / 10, num % 10);
+        }
+        helper(1, 0, 1, map);
+        return res;
+    }
+    private void helper(int pos, int sum, int depth, Map<Integer, Integer> map){
+        int key = depth * 10 + pos;
+        boolean left = false, right = false;
+        if(map.containsKey((depth + 1) * 10 + pos * 2 - 1)) left = true;
+        if(map.containsKey((depth + 1) * 10 + pos * 2)) right = true;
+        if(left == false && right == false) res += sum + map.get(key);
+        if(left) helper(pos * 2 - 1, sum + map.get(key), depth + 1, map);
+        if(right) helper(pos * 2, sum + map.get(key), depth + 1, map);
+           
+    }
+}

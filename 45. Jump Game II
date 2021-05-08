@@ -1,0 +1,32 @@
+Solution 1:
+class Solution {
+    public int jump(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        int min = Integer.MAX_VALUE;
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j < i; j++){
+                if(j + nums[j] >= i){
+                    min = Math.min(dp[j] + 1, min);
+                }
+            }
+            dp[i] = min;
+            min = Integer.MAX_VALUE;
+        }
+        return dp[n - 1];
+    }
+}
+Solution 2:
+class Solution {
+    public int jump(int[] nums) {
+        int end = 0, farest = 0, count = 0;
+        for(int i = 0; i < nums.length - 1; i++){
+            farest = Math.max(i + nums[i], farest);
+            if(i == end){
+                count++;
+                end = farest;
+            }
+        }
+        return count;
+    }
+}

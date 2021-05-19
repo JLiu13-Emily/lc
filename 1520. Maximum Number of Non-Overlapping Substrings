@@ -1,0 +1,51 @@
+class Solution {
+    public List<String> maxNumOfSubstrings(String s) {
+        char[] chars = s.toCharArray();
+        Map<Character, int[]> charRange = new HashMap<>();
+        for(int i = 0; i < chars.length; i++){
+            if(charRange.containsKey(chars[i])){
+                charRange.get(chars[i])[1] = i;
+            }
+            else{
+                charRange.put(chars[i], new int[]{i, i});
+            }
+        }
+        //extend range
+        List<int[]> values = new ArrayList<>(charRange.values());
+        for(int[] v : values){
+            int size = 0, min = v[0], max = v[1];
+            Set<Character> seen = new  HashSet<>();
+            for(int i = v[0]; i <= v[1]; i++){
+                if(seen.add(chars[i])){
+                    int[] temp = charRange.get(chars[i]);
+                    min = Math.min(min, temp[0]);
+                    max = Math.max(max, temp[1]);
+                }
+            }
+            while(seen.size() != size){
+                size = seen.size();
+                int tempMin = min;
+                int tempMax = max;
+                for(int i = min; i < v[0]; i++){
+                    if(seen.add(chars[i])){
+                        int[] temp = charRange.get(chars[i]);
+                        tempMin = Math.min(tempMin, temp[0]);
+                        tempMax = Math.max(tempMax, temp[1]);
+                    }
+                }
+                for(int i = v[1] + 1; i <= max; i++){
+                    if(seen.add(chars[i])){
+                        int[] temp = charRange.get(chars[i]);
+                        tempMin = Math.min(tempMin, temp[0]);
+                        tempMax = Math.max(tempMax, temp[1]);
+                    }
+                }
+                v[0] = min;
+                v[1] = max;
+                min = tempMin;
+                max = tempMax;
+            }
+        }
+        
+        Collections.sort(values, (a, b) -> a[1] - b[1]);
+        List<String> res = new ArrayList<>();

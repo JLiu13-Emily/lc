@@ -49,3 +49,13 @@ class Solution {
         
         Collections.sort(values, (a, b) -> a[1] - b[1]);
         List<String> res = new ArrayList<>();
+        int p = -1;
+        for(int[] v: values){
+            if(p < v[0]){
+                p = v[1];
+                res.add(s.substring(v[0], v[1] + 1));
+            }
+        }
+        return res;
+    }
+}

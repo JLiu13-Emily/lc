@@ -1,0 +1,33 @@
+class Solution {
+    Map<String, List<Integer>> map = new HashMap<>();
+    public List<Integer> diffWaysToCompute(String expression) {
+        if(map.containsKey(expression)) return map.get(expression);
+        List<Integer> res = new ArrayList<>();
+        for(int i = 0; i < expression.length(); i++){
+            char cur = expression.charAt(i);
+            if(cur == '+' || cur == '-' || cur == '*'){
+                String s1 = expression.substring(0, i);
+                String s2 = expression.substring(i + 1);
+                List<Integer> l1 = diffWaysToCompute(s1);
+                List<Integer> l2 = diffWaysToCompute(s2);
+                for(Integer i1 : l1){
+                    for(Integer i2 : l2){
+                        int r = 0;
+                        switch(cur){
+                            case '+': r = i1 + i2;
+                                break;
+                            case '-': r = i1 - i2;
+                                break;
+                            case '*': r = i1 * i2;
+                                break;
+                        }
+                        res.add(r);
+                    }
+                }
+            }
+        }
+        if(res.size() == 0) res.add(Integer.valueOf(expression));
+        map.put(expression, res);
+        return res;
+    }
+}

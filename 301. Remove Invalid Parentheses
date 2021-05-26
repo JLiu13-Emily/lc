@@ -1,0 +1,42 @@
+class Solution {
+    List<String> res = new ArrayList<>();
+    int maxLen = 0;
+    public List<String> removeInvalidParentheses(String s) {
+        int count = 0;
+        int remove = 0;
+        for(char c: s.toCharArray()){
+            if(c == '(') count++;
+            else if(c == ')'){
+                count--;
+            }
+            if(count < 0){
+                remove += 1;
+                count = 0;
+            }
+        }
+        remove += count;
+        maxLen = s.length() - remove;
+        String curStr = "";
+        dfs(s, 0, "", 0);
+        return res;        
+    }
+    private void dfs(String s, int idx, String curStr, int count){
+        if(count < 0) return;
+        if(curStr.length() > maxLen) return;
+        if(idx == s.length()){
+            if(count == 0 && curStr.length() == maxLen)
+                res.add(curStr);
+            return;
+        }
+        if(s.charAt(idx) != '(' && s.charAt(idx) != ')'){
+            dfs(s, idx + 1, curStr + s.charAt(idx), count);
+        }
+        else{
+            dfs(s, idx + 1, curStr + s.charAt(idx), count + (s.charAt(idx) == '(' ? 1 : -1));
+            if(curStr.isEmpty() || curStr.charAt(curStr.length() - 1) != s.charAt(idx)){
+                dfs(s, idx + 1, curStr, count);
+            }
+        }
+    }
+    
+}

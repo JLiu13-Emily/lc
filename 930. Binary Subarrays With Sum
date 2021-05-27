@@ -1,0 +1,15 @@
+class Solution {
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        int n = nums.length;
+        int[] freq = new int[n + 1];
+        int sum = 0, res = 0;
+        for(int i = 0; i < n; i++){
+            sum += nums[i];
+            int startSum = sum - goal;
+            if(startSum >= 0) res += freq[startSum];
+            if(sum == goal) res++;
+            freq[sum]++;
+        }
+        return res;
+    }
+}

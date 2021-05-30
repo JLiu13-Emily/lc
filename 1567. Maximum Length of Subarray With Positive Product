@@ -1,0 +1,23 @@
+class Solution {
+    public int getMaxLen(int[] nums) {
+        int countNeg = 0, negIdx = -1, zeroIdx = -1;
+        int maxLen = 0;
+        for(int i = 0; i < nums.length; i++){            
+            if(nums[i] < 0){
+                countNeg++;
+                if(negIdx == -1) negIdx = i;
+            }
+            if(nums[i] == 0){
+                negIdx = -1;
+                zeroIdx = i;
+                countNeg = 0;
+            }
+            else{
+                if(countNeg % 2 == 0) maxLen = Math.max(maxLen, i - zeroIdx);
+                else maxLen = Math.max(maxLen, i - negIdx);
+            }
+        }
+        return maxLen;
+        
+    }
+}

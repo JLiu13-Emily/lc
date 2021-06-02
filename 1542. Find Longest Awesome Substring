@@ -1,0 +1,40 @@
+class Solution {
+    public int longestAwesome(String s) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int res = 0;
+        int[] nums= new int[10];
+        for(int i = 0; i < s.length(); i++){
+            nums[s.charAt(i) - '0']++;
+            int key = convertKey(nums);
+            if(!map.containsKey(key)){
+                map.put(key, i);
+            }
+            if(map.containsKey(key)){
+                res = Math.max(res, i - map.get(key));
+            }
+            for(int k = 0; k < 10; k++){
+                int newKey = key;
+                if(((newKey>>k)&1) == 0){
+                    newKey += 1<<k;
+                }
+                else{
+                    newKey -= 1<<k;
+                }
+                if(map.containsKey(newKey)){
+                    res = Math.max(res, i - map.get(newKey));
+                }
+            }            
+        }
+        return res;        
+    }
+    private int convertKey(int[] nums){
+        int key = 0;
+        for(int i = 0; i < 10; i++){
+            if(nums[i] % 2 == 1){
+                key += 1<<i;
+            }
+        }
+        return key;
+    }
+}

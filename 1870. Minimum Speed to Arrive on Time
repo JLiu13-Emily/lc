@@ -1,0 +1,25 @@
+class Solution {
+    public int minSpeedOnTime(int[] dist, double hour) {
+        int min = 1; int max = (int)1e7;
+        int res = -1;
+        for(int i: dist){
+            max = Math.max(max, i);
+        }
+        while(min <= max){
+            int mid = min + (max - min) / 2;
+            double hsum = 0;
+            for(int d = 0; d < dist.length -1; d++){
+                hsum += Math.ceil(((double)dist[d]) / mid);
+            }
+            hsum += ((double)dist[dist.length - 1]) / mid;
+            if(hsum > hour){
+                min = mid + 1;
+            }
+            else{
+                res = mid;
+                max = mid - 1;
+            }
+        }
+        return res;
+    }
+}

@@ -1,0 +1,33 @@
+class Solution {
+    public int maxValue(int n, int index, int maxSum) {
+        int left = 1, right = maxSum;
+        while(left < right){
+            int mid = right - (right - left) / 2;
+            if(sumUp(mid, n, index) <= (long)maxSum){
+                left = mid;
+            }
+            else{
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+    private long sumUp(long h, long n, long idx){
+        long sum = 0;
+        if(h > idx){
+            sum += (h - idx + h) * (idx + 1) / 2;
+        }
+        else{
+            sum += idx - h + 1;
+            sum += (1 + h) * h / 2;
+        }
+        if(h > n - idx){
+            sum += (h + h - (n - idx) + 1) * (n - idx) / 2;
+        }
+        else{
+            sum += n - (idx + h);
+            sum += ( 1 + h) * h / 2;
+        }
+        return sum - h;
+    }
+}

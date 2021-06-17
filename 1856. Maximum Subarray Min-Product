@@ -1,0 +1,43 @@
+class Solution {
+    public int maxSumMinProduct(int[] nums) {
+      
+        int n = nums.length;        
+        int[] nextsmaller = new int[n];
+        int[] prevsmaller = new int[n];
+        Arrays.fill(nextsmaller, n);
+        Arrays.fill(prevsmaller, -1);
+        Stack<Integer> stack = new Stack<>();
+        
+        for(int i = 0; i < n; i++){
+            while(!stack.isEmpty() && nums[stack.peek()] > nums[i]){
+                nextsmaller[stack.peek()] = i;
+                stack.pop();
+            }
+            stack.push(i);
+        }
+        
+        while(!stack.isEmpty()) stack.pop();
+        for(int i = n - 1; i >=0; i--){
+            while(!stack.isEmpty() && nums[stack.peek()] > nums[i]){
+                prevsmaller[stack.peek()] = i;
+                stack.pop();
+            }
+            stack.push(i);
+        }
+        
+        long[] presum = new long[n];
+        presum[0] = nums[0];
+        for(int i = 1; i < n; i++){
+            presum[i] = presum[i - 1] + nums[i];
+        }
+        long res = 0;
+        long mod =(long)(1e9 + 7);
+        for(int i = 0; i < n; i++){
+            int a = prevsmaller[i];
+            int b = nextsmaller[i];
+            long sum = presum[(b - 1)] - (a == -1? 0 : presum[a]);
+            res = Math.max(res, sum * (long)nums[i]);
+        }
+        return (int)(res%mod);
+    }
+}

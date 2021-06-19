@@ -1,0 +1,17 @@
+class Solution {
+    public int[] nextLargerNodes(ListNode head) {
+        List<Integer> changeToList = new ArrayList<>();
+        for(ListNode nd = head; nd != null; nd = nd.next){
+            changeToList.add(nd.val);
+        }
+        int[] res = new int[changeToList.size()];
+        Stack<Integer> stack = new Stack<>();
+        for(int i = 0; i < changeToList.size(); i++){
+            while(!stack.isEmpty() && changeToList.get(stack.peek()) < changeToList.get(i)){
+                res[stack.pop()] = changeToList.get(i);
+            }
+            stack.push(i);
+        }
+        return res;
+    }
+}

@@ -1,0 +1,27 @@
+class Solution {
+    public int[] mostCompetitive(int[] nums, int k) {
+        Stack<Integer> stack = new Stack<>();
+        int delCount = nums.length - k;
+        for(int num: nums){
+            if(stack.isEmpty() || num >= stack.peek()){
+                stack.push(num);
+            }
+            else{
+                while(!stack.isEmpty() && delCount > 0 && num < stack.peek()){
+                    stack.pop();
+                    delCount--;
+                }
+                stack.push(num);
+            }
+        }
+        while(delCount > 0){
+            stack.pop();
+            delCount--;
+        }
+        int[] res = new int[k];
+        for(int i = k - 1; i >= 0; i--){
+            res[i] = stack.pop();
+        }
+        return res;
+    }
+}

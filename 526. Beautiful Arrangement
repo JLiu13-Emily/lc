@@ -1,0 +1,23 @@
+class Solution {
+    public int countArrangement(int n) {
+        char[] states = new char[n + 1];
+        Arrays.fill(states, 'f');
+        return helper(new HashMap<String, Integer>(), states, 1);
+        
+    }
+    private int helper(Map<String, Integer> map, char[] states, int index){
+        if(index == states.length) return 1;
+        String key = String.valueOf(states);
+        if(map.containsKey(key)) return map.get(key);
+        int count = 0;
+        for(int i = 1; i < states.length; i++){
+            if(states[i] == 'f' && (i % index == 0 || index % i == 0)){
+                states[i] = 't';
+                count += helper(map, states, index + 1);
+                states[i] = 'f';
+            }
+        }
+        map.put(key, count);
+        return count;
+    }
+}

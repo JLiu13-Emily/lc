@@ -1,3 +1,42 @@
+Solution1:
+class Solution {
+    public void solveSudoku(char[][] board) {
+        dfs(board, 0, 0);
+    }
+    private boolean dfs(char[][] board, int r, int c){
+        if(r == 9) return true;
+        if(c == 9) return dfs(board, r + 1, 0);
+        if(board[r][c] != '.') return dfs(board, r, c+ 1);
+        
+        for(char k = '1'; k <= '9'; k++){
+            if(!isValid(board, r, c, k)) continue;
+            board[r][c] = k;
+            if(dfs(board, r, c + 1)){
+                return true;
+            }
+            board[r][c] = '.';
+        }
+        return false;
+    }
+    private boolean isValid(char[][] board, int i, int j, int k){
+        for(int row = 0; row < 9; row++){
+            if(board[row][j] == k) return false;
+        }
+        for(int col = 0; col < 9; col++){
+            if(board[i][col] == k) return false;
+        }
+        int x = i / 3 * 3;
+        int y = j /3 * 3;
+        for(int m = 0; m < 3; m++){
+            for(int n = 0; n < 3; n++){
+                if(board[x + m][y + n] == k)
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+Solution2:
 class Solution {
     public void solveSudoku(char[][] board) {
         helper(board);
@@ -31,3 +70,6 @@ class Solution {
         return true;
     }
 }
+
+
+

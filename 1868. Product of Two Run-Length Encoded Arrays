@@ -1,0 +1,42 @@
+class Solution {
+    public List<List<Integer>> findRLEArray(int[][] encoded1, int[][] encoded2) {
+        int idx1  = 0, idx2 = 0;
+        int freq1 = 0, freq2 = 0;
+        int pdt = 0;
+        List<int[]> products = new ArrayList<>();
+        int len1 = encoded1.length, len2 = encoded2.length;
+        while(idx1 < len1 && idx2 < len2){
+            freq1 = encoded1[idx1][1];
+            freq2 = encoded2[idx2][1];
+            pdt = encoded1[idx1][0] * encoded2[idx2][0]; 
+            if(freq1 == freq2){
+                products.add(new int[]{pdt, freq1});
+                idx1++;
+                idx2++;
+            }
+            else if(freq1 < freq2){
+                products.add(new int[]{pdt, freq1});
+                encoded2[idx2][1] = freq2 - freq1;
+                idx1++;
+            }
+            else{
+                products.add(new int[]{pdt, freq2});
+                encoded1[idx1][1] = freq1 - freq2;
+                idx2++;
+            }
+        }
+        List<List<Integer>> res = new ArrayList<>();
+        int[] cur = products.get(0);
+        for(int i = 1; i < products.size(); i++){
+            if(products.get(i)[0] == cur[0]){
+                cur[1] += products.get(i)[1];
+            } 
+            else{
+                res.add(Arrays.asList(new Integer[]{cur[0], cur[1]}));
+                cur = products.get(i);
+            }
+        }
+        res.add(Arrays.asList(new Integer[]{cur[0], cur[1]}));
+        return res;
+    }
+}

@@ -1,0 +1,30 @@
+class Solution {
+    Random rand;
+    int[] n_w;
+    public Solution(int[] w) {
+        rand = new Random();
+        for(int i = 1; i < w.length; i++){
+            w[i] += w[i - 1];
+        }
+        n_w = w;
+    }
+    
+    public int pickIndex() {
+        int n = n_w.length;
+        int l = 0, r = n - 1;
+        int index = rand.nextInt(n_w[n - 1]) + 1;
+        while(l < r){
+            int mid = l + (r - l) / 2;
+            if(index == n_w[mid]){
+                return mid;
+            }
+            else if(index < n_w[mid]){
+                r = mid;
+            }
+            else{
+                l = mid + 1;
+            }
+        }
+        return l;
+    }
+}

@@ -1,0 +1,21 @@
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        Map<Integer, List<Integer>> indexes = new HashMap<>();
+        int count = 0;
+        int sum = 0;
+        for(int i = 0; i < nums.length; i++){
+            sum += nums[i];
+            if(sum == k){
+                count++;
+            }
+            if(indexes.containsKey(sum - k)){
+                count += indexes.get(sum - k).size();
+            }
+            if(!indexes.containsKey(sum)){
+                indexes.put(sum, new ArrayList<>());
+            }
+            indexes.get(sum).add(i);
+        }
+        return count;
+    }
+}

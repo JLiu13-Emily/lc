@@ -1,0 +1,21 @@
+class Solution {
+    public int maxUniqueSplit(String s) {
+        return dfs(s, new ArrayList<>(), 0);
+    }
+    private int dfs(String s, ArrayList<String> ls, int curIdx){
+        if(curIdx == s.length())
+            return ls.size();
+        
+        int max = 0;
+        
+        for(int i = curIdx; i < s.length(); i++){
+            String cut = s.substring(curIdx, i + 1);
+            if(!ls.contains(cut)){
+                ls.add(cut);
+                max = Math.max(max, dfs(s, ls, i + 1));
+                ls.remove(ls.size() - 1);
+            }
+        }
+        return max;
+    }
+}

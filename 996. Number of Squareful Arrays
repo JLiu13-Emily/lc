@@ -1,0 +1,43 @@
+class Solution {
+    int len;
+    ArrayList<Integer>[] next;
+    int[] visited = new int[12];
+    int res = 0;
+    public int numSquarefulPerms(int[] nums) {
+       len = nums.length;
+        next = new ArrayList[len];
+        Arrays.sort(nums);
+        for(int i = 0; i < len; i++){
+            next[i] = new ArrayList<Integer>();
+            for(int j = 0; j < len; j++){
+                if(i == j) continue;
+                if(Math.sqrt(nums[i] + nums[j]) == (int)Math.sqrt(nums[i] + nums[j])){
+               
+                    next[i].add(j);
+                }                   
+            }
+        }
+        for(int i = 0; i < len; i++){
+            if(i > 0 && nums[i] == nums[i - 1]) continue;
+            visited[i] = 1;
+            dfs(nums, i, 1);
+            visited[i] = 0;
+        }
+        return res;
+    }
+    private void dfs(int[] nums, int curidx, int count){
+        if(count == len){
+            res++;
+            return;
+        }
+        int last = -1;
+        for(int i: next[curidx]){
+            if(visited[i] == 1) continue;
+            if(nums[i] == last) continue;
+            visited[i] = 1;
+            last = nums[i];
+            dfs(nums, i, count + 1);
+            visited[i] = 0;
+        }
+    }
+}

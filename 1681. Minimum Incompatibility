@@ -1,0 +1,49 @@
+class Solution {
+    int subsetSize = 0;
+    int res = Integer.MAX_VALUE;
+    public int minimumIncompatibility(int[] nums, int k) {
+        int n = nums.length;
+        subsetSize = n / k;
+        List<Set<Integer>> sets = new ArrayList<>();
+        for(int i = 0; i < k; i++){
+            sets.add(new HashSet<>());
+        }
+        dfs(nums, 0, sets, 0);
+        return res == Integer.MAX_VALUE? -1 : res;
+    }
+    private void dfs(int[] nums, int idx, List<Set<Integer>> sets, int account){
+        if(idx >= nums.length){
+            res = Math.min(res, account);
+            return;
+        }
+        
+        Set<Set<Integer>> visited = new HashSet<>();
+        
+        for(Set<Integer> set : sets){
+            if(set.size() == subsetSize || set.contains(nums[idx]) || visited.contains(set)) continue;            
+            int impact = addImpact(set, nums[idx]); 
+            account += impact;
+            if(account < res){
+                set.add(nums[idx]);
+                dfs(nums, idx + 1, sets, account);
+                set.remove(nums[idx]);
+            }
+            account -= impact;
+            visited.add(set);
+        }
+    }
+    private int addImpact(Set<Integer> set, int addnum){
+        if(set.size() == 0) return 0;
+        if(set.size() == 1) return Math.abs(set.iterator().next() - addnum);
+        int low = Integer.MAX_VALUE;
+        int high = Integer.MIN_VALUE;
+        
+        for(int i : set){
+            low = Math.min(low, i);
+            high = Math.max(high, i);
+        }
+        if(addnum  < low) return low - addnum;
+        if(addnum > high) return addnum - high;      
+        return 0;
+    }
+}

@@ -1,0 +1,77 @@
+class Solution {
+    int block = -1, unexplored = 0, path = 1, target = 2, start = 3;
+    public int findShortestPath(GridMaster master) {
+        int m = 500;
+        int[][] board = new int[m*2][m*2];
+        int[] startpoint = new int[]{m, m};
+        board[m][m] = start;
+        int[] target = dfs(master, board, m, m);
+        return target == null ? -1 : bfs(board, target, startpoint);
+    }
+    private int[] dfs(GridMaster master, int[][] board, int r, int c){
+        if(master.isTarget()){
+            board[r][c] = target;
+            return new int[]{r, c};
+        }
+        int[] res = null;
+        for(Direction d: Direction.values()){
+            int r2 = r + d.n[0];
+            int c2 = c + d.n[1];
+            if(board[r2][c2] == unexplored){
+                if(master.canMove(d.c)){
+                    master.move(d.c);
+                    board[r2][c2] = path;
+                    int[] target = dfs(master, board, r2, c2);
+                    if(target != null){
+                        res = target;
+                    }
+                    master.move(d.o);
+                }
+                else{
+                    board[r2][c2] = block;
+                }
+            }
+        }
+        return res;
+    }
+    private int bfs(int[][] board, int[] target, int[] startpoint){
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.add(target);
+        int distance = 1;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                int[] cur = queue.poll();
+                for(Direction d : Direction.values()){
+                    int r2 = cur[0] + d.n[0];
+                    int c2 = cur[1] + d.n[1];
+                    if(board[r2][c2] == start){
+                        return distance;
+                    }
+                    else if(board[r2][c2] == path){
+                        board[r2][c2] = block;
+                        queue.add(new int[]{r2, c2});
+                    }
+                }
+            }
+            distance++;
+        }
+        return distance;        
+    }
+    enum Direction {
+        UP('U', 'D', new int[]{0,1}),
+        DOWN('D', 'U', new int[]{0,-1}),
+        LEFT('L', 'R', new int[]{-1,0}),
+        RIGHT('R', 'L', new int[]{1,0});
+        
+        public char c;
+        public char o;
+        public int[] n;
+        
+        Direction(char c, char o, int[] n) {
+            this.c = c;
+            this.o = o;
+            this.n = n;
+        }            
+    }
+}

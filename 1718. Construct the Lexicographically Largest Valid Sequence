@@ -1,0 +1,32 @@
+class Solution {
+    int[] used = new int[21];
+    int n;
+    int[] res;
+    public int[] constructDistancedSequence(int n) {
+        res = new int[2 * n - 1];
+        this.n = n;
+        dfs(0);
+        return res;
+    }
+    private boolean dfs(int pos){
+        if(pos == 2 * n - 1) return true;
+        if(res[pos] > 0){
+            return dfs(pos + 1);
+        }
+        
+        for(int d = n; d >= 1; d--){
+            if(used[d] == 1) continue;
+            if(d > 1 && (pos + d >= 2 * n - 1 || res[pos + d] > 0) ) continue;
+            used[d] = 1;
+            res[pos] = d;
+            if(d > 1) res[pos + d] = d;
+            if(dfs(pos + 1)){
+                return true;
+            }
+            used[d] = 0;
+            res[pos] = 0;
+            if(d > 1) res[pos + d] = 0;
+        }
+        return false;
+    }
+}

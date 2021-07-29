@@ -1,0 +1,31 @@
+class Solution {
+    public int[] getOrder(int[][] tasks) {
+        int n = tasks.length;
+        int[] res = new int[n];
+        int[][] tri = new int[n][3];
+        for(int i = 0; i < n; i++){
+            tri[i][0] = i;
+            tri[i][1] = tasks[i][0];
+            tri[i][2] = tasks[i][1];
+        }
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>((a, b) -> a[2] == b[2] ? a[0] - b[0] : a[2] - b[2]);
+        Arrays.sort(tri, (a, b) -> a[1] - b[1]);
+        int count = 0;
+        int curTime = 0;
+        int t = 0;
+        while(count < n){
+            while(t < n && tri[t][1] <= curTime){
+                pq.offer(tri[t++]);
+            }
+            if(pq.isEmpty()){
+                curTime = tri[t][1];
+                continue;
+            }
+            int[] choice = pq.poll();
+            res[count] = choice[0];
+            count++;
+            curTime += choice[2];
+        }
+        return res;
+    }
+}

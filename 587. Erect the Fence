@@ -1,0 +1,80 @@
+class Solution {
+    public int[][] outerTrees(int[][] trees) {
+        int n = trees.length;
+        Point[] points = new Point[n];
+        if(points == null || n == 0) return new int[][]{};
+        for(int i = 0; i < n; i++){
+            points[i] = new Point(trees[i][0], trees[i][1]);
+        }
+        List<Point> res = new ArrayList<>();
+        
+        Set<Point> visited = new HashSet<>();
+        Point start = points[0];
+        for(int i = 1; i < n; i++){
+            if(points[i].y > start.y || (points[i].y == start.y && points[i].x < start.x)){
+                start = points[i];
+            }
+        }
+        if(points.length == 1){
+            res.add(start);
+            Point p = res.get(0);
+            return new int[][]{{p.x, p.y}};
+        }
+        Point cur = start;
+        while(cur != null && visited.add(cur)){
+            res.add(cur);
+            for(int i = 0; i < n; i++){
+                if(visited.contains(points[i])){
+                    continue;
+                }
+                if(isBorder(cur, points[i], points)){
+                    cur = points[i];
+                    break;
+                }
+            }
+        }
+        for(int i = 0; i < n; i++){
+            if(visited.contains(points[i]) || res.contains(points[i])){
+                continue;
+            }
+            int size = res.size();
+            for(int j = 0; j < size; j++){
+                Point p = res.get(j);
+                if(isBorder( p, points[i], points)){
+                    visited.add(points[i]);
+                    res.add(points[i]);
+                    break;
+                }
+            }
+        }
+        int[][] ans = new int[res.size()][2];
+        for(int i = 0; i < res.size(); i++){
+            ans[i][0] = res.get(i).x;
+            ans[i][1] = res.get(i).y;
+        }
+        return ans;
+    }
+    private boolean isBorder(Point a, Point b, Point[] points){
+        int dx = a.x - b.x;
+        int dy = a.y - b.y;
+        int e = a.x * dy - a.y * dx;
+        int prev = 0;
+        for(int i = 0; i < points.length; i++){
+            int tempx = points[i].x;
+            int tempy = points[i].y;
+            int diff = tempy * dx - tempx * dy + e;
+            if(diff == 0) continue;
+            if(diff * prev < 0) return false;
+            if(diff < 0) prev = -1;
+            else prev = 1;
+        }
+        return true;
+    }
+}
+class Point{
+    int x, y;
+    public Point(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}

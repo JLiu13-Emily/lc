@@ -1,0 +1,31 @@
+class Solution {
+    TreeMap<Integer, Integer> areaMap;
+    Random r;
+    int area;
+    int[][] rects;
+    public Solution(int[][] rects) {
+        this.rects = rects;
+        r = new Random();
+        areaMap = new TreeMap<>();
+        area = 0;
+        for(int i = 0; i < rects.length; i++){
+            area += (rects[i][2] - rects[i][0] + 1) * (rects[i][3] - rects[i][1] + 1);
+            areaMap.put(area, i);
+        }
+    }
+    
+    public int[] pick() {
+        int randArea = r.nextInt(area);
+        int key = areaMap.higherKey(randArea);
+        int[] rect = rects[areaMap.get(key)];
+        int x = rect[0] + (key - randArea - 1) % (rect[2] - rect[0] + 1);
+        int y = rect[1] + (key - randArea - 1) / (rect[2] - rect[0] + 1);
+        return new int[]{x, y};
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(rects);
+ * int[] param_1 = obj.pick();
+ */

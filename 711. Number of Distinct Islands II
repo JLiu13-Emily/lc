@@ -1,0 +1,63 @@
+class Solution {
+    public int numDistinctIslands2(int[][] grid) {
+        int n = grid.length, m = grid[0].length;
+        if(n == 0 || grid == null) return 0;
+        Set<String> set = new HashSet<>();
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        int[][] transformation = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 1) {
+                    List<int[]> cells = new ArrayList<>();
+                    getCells(grid, cells, i, j, dirs);
+                    String key = normalize(cells, transformation);
+                    set.add(key);
+                }
+            }
+        }
+        return set.size();
+    }
+    private void getCells(int[][] grid, List<int[]> cells, int r, int c, int[][] dirs){
+        cells.add(new int[]{r, c});
+        grid[r][c] = 0;
+        for(int[] dir: dirs){
+            int nr = r + dir[0];
+            int nc = c + dir[1];
+            if(nr >= 0 && nc >= 0 && nr < grid.length && nc < grid[0].length && grid[nr][nc] == 1){
+                getCells(grid, cells, nr, nc, dirs);
+            }
+        }
+    }
+    private String normalize(List<int[]> cells, int[][] transformation){
+        List<String> strs = new ArrayList<>();
+        for(int[] tran : transformation){            
+            List<int[]> l1 = new ArrayList<>();
+            List<int[]> l2 = new ArrayList<>();
+            for(int[] c : cells){
+                int x = c[0];
+                int y = c[1];
+                l1.add(new int[]{x * tran[0], y * tran[1]});
+                l2.add(new int[]{y * tran[1], x * tran[0]});
+            }
+            strs.add(getKey(l1));
+            strs.add(getKey(l2));
+        }
+        Collections.sort(strs);
+        return strs.get(0);
+    }
+    private String getKey(List<int[]> cells){
+        Collections.sort(cells, new Comparator<int[]>(){
+            @Override
+            public int compare(int[] a, int[] b){
+                return a[0] == b[0] ? a[1] - b[1] : a[0] - b[0];
+            }
+        });
+        StringBuilder key = new StringBuilder();
+        int startX = cells.get(0)[0];
+        int startY = cells.get(0)[1];
+        for(int[] c : cells){
+            key.append((c[0] - startX) + ":" + (c[1] - startY));
+        }
+        return key.toString();
+    }
+}

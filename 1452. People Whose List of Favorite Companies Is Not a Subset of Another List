@@ -1,0 +1,40 @@
+class Solution {
+    public List<Integer> peopleIndexes(List<List<String>> favoriteCompanies) {
+        List<Set<String>> setList = new ArrayList<>();
+        for(List<String> l : favoriteCompanies) setList.add(new HashSet<>(l));
+        int n = favoriteCompanies.size();
+        int[] uf = new int[n];
+        for(int i = 0; i < n; i++) uf[i] = i;
+        for(int i = 0; i < n; i++){
+            for(int j = i + 1; j < n; j++){
+                union(uf, setList, i, j);
+            }
+        }
+        Set<Integer> roots = new HashSet<>();
+        for(int i = 0; i < n; i++){
+            roots.add(find(uf, i));
+        }
+        List<Integer> res = new ArrayList<>();
+        res.addAll(roots);
+        Collections.sort(res);
+        return res;
+    }
+    private void union(int[] uf, List<Set<String>> setList, int i, int j){
+        int rooti = find(uf, i);
+        int rootj = find(uf, j);
+        if(isSub(setList.get(i), setList.get(j))){
+            uf[i] = j;
+        }
+        else if(isSub(setList.get(j), setList.get(i))){
+            uf[j] = i;
+        }
+    }
+    private int find(int[] uf, int idx){
+        if(uf[idx] == idx) return idx;
+        return uf[idx] = find(uf,uf[idx]);
+    }
+    private boolean isSub(Set<String> setSmall, Set<String> setBig){
+        if(setSmall.size() >= setBig.size()) return false;
+        return setBig.containsAll(setSmall);
+    }
+}

@@ -1,0 +1,23 @@
+class Solution {
+    int res = 0;
+    public int closestCost(int[] baseCosts, int[] toppingCosts, int target) {
+        res = baseCosts[0];
+        for(int base: baseCosts){
+            helper(base, target, toppingCosts, 0);
+        }
+        return res;
+    }
+    private void helper(int curcost, int target, int[] toppingCosts, int pos){
+        if(Math.abs(target - curcost) < Math.abs(target - res) || Math.abs(target - curcost) == Math.abs(target - res) && curcost < res){
+             res = curcost;
+        }
+        if(pos == toppingCosts.length) return;
+        helper(curcost, target, toppingCosts, pos + 1);
+        if(curcost < target){
+            helper(curcost + toppingCosts[pos], target, toppingCosts, pos + 1);
+        }
+        if(curcost + toppingCosts[pos] < target){
+            helper(curcost + toppingCosts[pos] * 2, target, toppingCosts, pos + 1);
+        }
+    }
+}

@@ -1,0 +1,28 @@
+class Solution {
+    int max = 0;
+    public int maxProduct(String s) {
+        char[] chs = s.toCharArray();
+        helper(chs, "", "", 0);
+        return max;
+    }
+    private void helper(char[] chs, String s1, String s2, int pos){
+        if(pos == chs.length){
+            if(isPal(s1) && isPal(s2)){
+                max = Math.max(max, s1.length() * s2.length());                
+            }
+            return;
+        }
+        helper(chs, s1 + chs[pos], s2, pos + 1);
+        helper(chs, s1 , s2 + chs[pos], pos + 1);
+        helper(chs, s1, s2, pos + 1);
+    }
+    private boolean isPal(String s){
+        int n = s.length();
+        for(int i = 0; i < n / 2; i++){
+            if(s.charAt(i)!=(s.charAt(n - i - 1))){
+                return false;
+            }
+        }
+        return true;
+    }
+}

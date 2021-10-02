@@ -1,0 +1,23 @@
+class Solution {
+    public int findTargetSumWays(int[] nums, int S) {
+        int n = nums.length;
+        int sum = 0;
+        for(int num : nums) sum += num;
+        if(S < -sum || S > sum) return 0;
+        int[][] dp = new int[n + 1][sum * 2 + 1];
+        dp[0][sum] = 1;
+        int lower = 0, upper = 2 * sum;
+        for(int i = 1; i <= n; i++){
+            for(int j = lower ; j < upper + 1; j++){
+               if(j + nums[i - 1] <= upper){
+                   dp[i][j] += dp[i - 1][j + nums[i - 1]];
+               }
+               if(j - nums[i - 1] >= lower){
+                   dp[i][j] += dp[i - 1][j - nums[i - 1]];
+               }
+                
+            }
+        }
+        return dp[n][S + sum];
+    }
+}

@@ -1,0 +1,23 @@
+class Solution {
+    public int countSubstrings(String s) {
+        int n = s.length();
+        int res = 0;
+        for(int i = 0; i < n; i++){
+            res += stretch(s, i, i);
+            res += stretch(s, i, i + 1);
+        }
+        return res;
+    }
+    private int stretch(String s, int lo, int hi){
+        int count = 0;
+        while(lo >= 0 && hi < s.length()){
+            if(s.charAt(lo) != s.charAt(hi)){
+                return count;
+            }
+            count++;
+            lo--;
+            hi++;
+        }
+        return count;
+    }
+}

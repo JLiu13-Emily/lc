@@ -1,0 +1,41 @@
+class Solution {
+    public List<Integer> cheapestJump(int[] coins, int maxJump) {
+        int n = coins.length;
+        int[] next = new int[n];
+        long[] memo = new long[n];
+        Arrays.fill(next, -1);
+        dfs(coins, maxJump, 0, next, memo);
+        List<Integer> res = new ArrayList<>();
+        int i;
+        for(i = 0; i < n && next[i] > 0; i = next[i]){
+            res.add(i + 1);
+        }
+        if(i == n - 1 && coins[i] >= 0){
+            res.add(n);
+        }
+        else 
+            return new ArrayList<>();
+        return res;
+    }
+    private long dfs(int[] coins, int maxJump, int start, int[] next, long[] memo){
+        if(memo[start] > 0){
+            return memo[start];
+        }
+        if(start == coins.length - 1 && coins[start] >= 0){
+            return coins[start];
+        }
+        long min = Integer.MAX_VALUE;
+        for(int i = start + 1; i <= start + maxJump && i < coins.length; i++){
+            if(coins[i] >= 0){
+                long cost = coins[start] + dfs(coins, maxJump, i, next, memo);
+                if(cost < min){
+                    min = cost;
+                    next[start] = i;
+                }
+            }
+            
+        }
+        memo[start] = min;
+        return min;
+    }
+}

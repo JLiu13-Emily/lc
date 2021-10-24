@@ -1,0 +1,20 @@
+class Solution {
+    public int countRoutes(int[] locations, int start, int finish, int fuel) {
+        long mod = (long)1e9 + 7;
+        if(Math.abs(locations[start] - locations[finish]) > fuel) return 0;
+        int count = 0;
+        long[][] dp = new long[locations.length][fuel + 1];
+        Arrays.fill(dp[finish], 1);
+        for(int i = 0; i <= fuel; i++){
+            for(int j = 0; j < locations.length; j++){
+                for(int k = 0; k < locations.length; k++){
+                    if(j == k) continue;
+                    if(Math.abs(locations[j] - locations[k]) <= i){
+                        dp[j][i] = (dp[k][i - Math.abs(locations[j] - locations[k])] + dp[j][i]) % mod;
+                    }
+                }
+            }
+        }
+        return (int)dp[start][fuel];
+    }
+}

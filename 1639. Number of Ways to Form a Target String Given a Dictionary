@@ -1,0 +1,17 @@
+class Solution {
+    public int numWays(String[] words, String target) {
+        long mod = (long)1e9 + 7;
+        long[] dp = new long[target.length()];
+        for(int i = 0; i < words[0].length(); i++){
+            int[] count = new int[26];
+            for(int j = 0; j < words.length; j++){
+                count[words[j].charAt(i) - 'a']++;
+            }
+            for(int k = Math.min(i, target.length() - 1); k >= 0; k--){
+                dp[k] += k == 0? count[target.charAt(k) - 'a'] : dp[k - 1] * count[target.charAt(k) - 'a'];
+                dp[k] %= mod;
+            }
+        }
+        return (int)dp[target.length() - 1];
+    }
+}

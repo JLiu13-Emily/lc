@@ -1,0 +1,20 @@
+class Solution {
+    public int twoEggDrop(int n) {
+        int[][] dp = new int[n + 1][3];
+        return dfs(n, 2, dp);
+    }
+    private int dfs(int floors, int eggs, int[][] dp){
+        if(eggs == 1 || floors <= 1){
+            return floors;
+        }
+        if(dp[floors][eggs] > 0){
+            return dp[floors][eggs];
+        }
+        int min = Integer.MAX_VALUE;
+        for(int i = 1; i <= floors; i++){
+            min = Math.min(min, 1 + Math.max(dfs(i - 1, eggs - 1, dp), dfs(floors - i, eggs, dp)));
+        }
+        dp[floors][eggs] = min;
+        return min;
+    }
+}

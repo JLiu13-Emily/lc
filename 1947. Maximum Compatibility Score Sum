@@ -1,0 +1,30 @@
+class Solution {
+    private int max = 0;
+    public int maxCompatibilitySum(int[][] students, int[][] mentors) {
+        boolean[] visited = new boolean[mentors.length];
+        dfs(visited, students, mentors, 0, 0);
+        return max;
+    }
+    private void dfs (boolean[] visited, int[][] students, int[][] mentors, int idx, int sum) {
+        if (idx >= students.length) {
+            max = Math.max(max, sum);
+            return;
+        }
+        for (int i = 0; i < mentors.length; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                dfs(visited, students, mentors, idx + 1, sum + score(students[idx], mentors[i]));
+                visited[i] = false;
+            }
+        }
+    }
+    private int score (int[] s, int[] m) {
+        int res = 0;
+        for (int i = 0; i < s.length; i++) {
+            if (s[i] == m[i]) {
+                res++;
+            }
+        }
+        return res;
+    }
+}

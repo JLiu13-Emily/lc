@@ -1,0 +1,25 @@
+class DetectSquares {
+    List<int[]> points;
+    Map<String,Integer> map = new HashMap<>();
+    public DetectSquares() {
+        points = new ArrayList<>();
+        map = new HashMap<>();
+    }
+    
+    public void add(int[] point) {
+        points.add(point);
+        String key = point[0] + "@" + point[1];
+        map.put(key, map.getOrDefault(key, 0) + 1);
+    }
+    
+    public int count(int[] point) {
+        int sum = 0;
+        int px = point[0], py = point[1];
+        for(int[] cur : points) {
+            int curx = cur[0], cury = cur[1];
+            if(px == curx || py == cury || Math.abs(px - curx) != Math.abs(py - cury)) continue;
+            sum += map.getOrDefault(px + "@" + cury, 0) * map.getOrDefault(curx + "@" + py, 0);
+        }
+        return sum;
+    }
+}

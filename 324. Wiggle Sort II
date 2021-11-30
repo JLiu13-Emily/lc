@@ -1,0 +1,71 @@
+/*class Solution {
+    public void wiggleSort(int[] nums) {
+        int n = nums.length;
+        int[] copy = Arrays.copyOf(nums, n);
+        Arrays.sort(copy);       
+        int left = (n +1) /2 - 1;
+        int right = n - 1;
+        for(int i = 0; i < n; i++) {
+            if(i % 2 == 1) {
+                nums[i] = copy[right--];
+            }
+            else { 
+                nums[i] = copy[left--];
+            }
+        }
+        
+    }
+}*/
+class Solution {
+    public void wiggleSort(int[] nums) {
+        int median = findKthLargest(nums, (nums.length + 1) / 2);
+        int n = nums.length;
+        int left = 0, right = n - 1, i = 0;
+        while(i <= right) {
+            if(nums[newIdx(i, n)] > median) {
+                swap (nums, newIdx(left++, n), newIdx(i++, n));
+            }
+            else if(nums[newIdx(i, n)] < median) {
+                swap (nums, newIdx(right--, n), newIdx(i, n));
+            }
+            else{
+                i++;
+            }
+        }
+    }
+    private int newIdx(int i, int n) {
+        return (1 + 2 * i) % (n | 1);
+    }
+    private void swap(int[] nums, int l, int r) {
+        int temp = nums[l];
+        nums[l] = nums[r];
+        nums[r] = temp;
+    }
+    public int findKthLargest(int[] nums, int k) {
+        int n = nums.length;
+        return quickSelect(nums, 0, n - 1, k);
+    }
+    private int quickSelect(int[] nums, int start, int end, int k) {
+        if(start == end) return nums[start];
+        int left = start, right = end;
+        int pivot = nums[left + (right - left) / 2];
+        while(left <= right) {
+            while(left <= right && nums[left] > pivot) {
+                left++;
+            }
+            while(left <= right && nums[right] < pivot) {
+                right--;
+            }
+            if(left <= right) {
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+                left++;
+                right--;
+            }
+        }
+        if(start + k - 1 <= right) return quickSelect(nums, start, right, k);
+        if(start + k - 1 >= left) return quickSelect(nums, left, end, k - (left - start));
+        return nums[right + 1];
+    }
+}

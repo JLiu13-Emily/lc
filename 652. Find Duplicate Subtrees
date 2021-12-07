@@ -1,0 +1,22 @@
+class Solution {
+    int curId = 1;
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        Map<String, Integer> sToId = new HashMap<>();
+        Map<Integer, Integer> idToCount = new HashMap<>();
+        List<TreeNode> res = new ArrayList<>();
+        postorder(root, sToId, idToCount, res);
+        return res;
+    }
+    private int postorder(TreeNode root, Map<String, Integer> sToId, Map<Integer, Integer> idToCount, List<TreeNode> res) {
+        if(root == null) return 0;
+        int left = postorder(root.left, sToId, idToCount, res);
+        int right = postorder(root.right, sToId, idToCount, res);
+        String cur = left + "," + root.val + "," + right;
+        int sId = sToId.getOrDefault(cur, curId);
+        if(sId == curId) curId++;
+        sToId.put(cur, sId);
+        idToCount.put(sId, idToCount.getOrDefault(sId, 0) + 1);
+        if(idToCount.get(sId) == 2) res.add(root);
+        return sId;
+    }
+}

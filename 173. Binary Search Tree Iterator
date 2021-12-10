@@ -1,0 +1,22 @@
+class BSTIterator {
+    TreeNode root;
+    Queue<Integer> list = new LinkedList<>();
+    public BSTIterator(TreeNode root) {
+        this.root = root;
+        addList(root, list);
+    }
+    private void addList(TreeNode root, Queue<Integer> list) {
+        if(root == null) return;
+        addList(root.left, list);
+        list.add(root.val);
+        addList(root.right, list);
+    }
+    
+    public int next() {
+        return list.poll();
+    }
+    
+    public boolean hasNext() {
+        return !list.isEmpty();
+    }
+}

@@ -1,0 +1,19 @@
+class Solution {
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        List<Integer> nums = new ArrayList<>();
+        inorder(root, nums);
+        Collections.sort(nums, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer a, Integer b) {
+                return Math.abs(a - target) < Math.abs(b - target) ? -1 : 1;
+            }
+        });
+        return nums.subList(0, k);
+    }
+    private void inorder(TreeNode root, List<Integer> nums) {
+        if(root == null) return;
+        inorder(root.left, nums);
+        nums.add(root.val);
+        inorder(root.right, nums);
+    }
+}

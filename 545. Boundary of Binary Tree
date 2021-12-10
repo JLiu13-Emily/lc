@@ -1,0 +1,49 @@
+class Solution {
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if(root == null) return res;
+        if(!isleaf(root)) {
+            res.add(root.val);
+        }        
+        TreeNode left = root.left;
+        while(left != null) {
+            if(!isleaf(left)) res.add(left.val);
+            if(left.left != null) {
+                left = left.left;
+            }
+            else {
+                left = left.right;
+            }            
+        }
+        addLeaf(res, root);
+        Stack<Integer> stack = new Stack<>();
+        TreeNode right = root.right;
+        while(right != null) {
+            if(!isleaf(right)) {
+                stack.push(right.val);
+            }
+            if(right.right != null) {
+                right = right.right;
+            }
+            else {
+                right = right.left;
+            }
+        }
+        while(!stack.isEmpty()) {
+            res.add(stack.pop());
+        }
+        return res;
+    }
+    private void addLeaf(List<Integer> res, TreeNode root) {
+        if(isleaf(root)) {
+            res.add(root.val);
+        }
+        else{
+            if(root.left != null) addLeaf(res, root.left);
+            if(root.right != null) addLeaf(res, root.right);
+        }
+    }
+    private boolean isleaf(TreeNode root) {
+        return root.left == null && root.right == null ;
+    }
+}

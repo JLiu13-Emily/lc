@@ -1,0 +1,44 @@
+class Solution {
+    public List<List<String>> printTree(TreeNode root) {
+        List<List<String>> res = new ArrayList<>();
+        if(root == null) return res;
+        int rows = getH(root);
+        int cols = (int)Math.pow(2, rows) - 1;
+        for(int i = 0; i < rows; i++) {
+            List<String> row = new ArrayList<>();
+            for(int j = 0; j < cols; j++) {
+                row.add("");
+            }
+            res.add(row);
+        }
+        Queue<TreeNode> q = new LinkedList<>();
+        Queue<int[]> idxs = new LinkedList<>();
+        q.offer(root);
+        idxs.offer(new int[]{0, cols - 1});
+        int row = -1;
+        while(!q.isEmpty()) {
+            row++;
+            int size = q.size();
+            for(int i = 0; i < size; i++) {
+                TreeNode cur = q.poll();
+                int[] indices = idxs.poll();
+                if(cur == null) {
+                    continue;
+                }
+                int left = indices[0];
+                int right = indices[1];
+                int mid = left + (right - left) / 2;
+                res.get(row).set(mid, String.valueOf(cur.val));
+                q.offer(cur.left);
+                q.offer(cur.right);
+                idxs.offer(new int[]{left, mid - 1});
+                idxs.offer(new int[]{mid + 1, right});
+            }
+        }
+        return res;
+    }
+    private int getH(TreeNode root) {
+        if(root == null) return 0;
+        return 1 + Math.max(getH(root.left), getH(root.right));
+    }
+}

@@ -1,0 +1,32 @@
+class Solution {
+    public int widthOfBinaryTree(TreeNode root) {
+        if(root == null) return 0;
+        Queue<TreeNode> q = new LinkedList<>();
+        Map<TreeNode, Integer> orders = new HashMap<>();
+        q.offer(root);
+        orders.put(root, 1);
+        int curWidth = 0;
+        int maxWidth = 0;
+        while(!q.isEmpty()) {
+            int size = q.size();
+            int start = 0;
+            int end = 0;
+            for(int i = 0; i < size; i++) {
+                TreeNode cur = q.poll();
+                if(i == 0) start = orders.get(cur);
+                if(i == size - 1) end = orders.get(cur);
+                if(cur.left != null) {
+                    orders.put(cur.left, orders.get(cur) * 2);
+                    q.offer(cur.left);
+                }
+                if(cur.right != null) {
+                    orders.put(cur.right, orders.get(cur) * 2 + 1);
+                    q.offer(cur.right);
+                }
+            }
+            curWidth = end - start + 1;
+            maxWidth = Math.max(maxWidth, curWidth);
+        }
+        return maxWidth;
+    }
+}

@@ -1,0 +1,20 @@
+class Solution {
+    List<Integer> sums = new ArrayList<>();
+    int mod = (int)1e9 + 7; 
+    public int maxProduct(TreeNode root) {
+        long allSum = findSum(root);
+        long res = 0;
+        for(int s : sums) {
+           res = Math.max(res, s * (allSum - s)); 
+        }
+        return (int) (res % mod);
+    }
+    private int findSum(TreeNode root) {
+        if(root == null) return 0;
+        int left = findSum(root.left);
+        int right = findSum(root.right);
+        int total = left + right + root.val;
+        sums.add(total);
+        return total;
+    }
+}
